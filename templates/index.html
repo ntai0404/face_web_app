@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nhận diện khuôn mặt</title>
+    <style>
+      body {
+        font-family: Arial;
+        background-color: #f0f8ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background: white;
+        padding: 30px 50px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      img.logo {
+        width: 100px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+      }
+      h1 {
+        color: #004aad;
+        margin-bottom: 30px;
+      }
+      button {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="{{ url_for('static', filename='logo.png') }}"
+        alt="logo"
+        class="logo"
+      />
+      <h1>Ứng dụng nhận diện khuôn mặt</h1>
+
+      <form method="POST" action="/train" style="display: inline">
+        <button type="submit">Huấn luyện mô hình</button>
+      </form>
+
+      <form method="GET" action="/recognize" style="display: inline">
+        <button type="submit">Nhận diện khuôn mặt</button>
+      </form>
+      <a href="{{ url_for('camera') }}">
+        <button class="btn btn-success">Nhận diện bằng Camera</button>
+      </a>
+    </div>
+  </body>
+</html>
