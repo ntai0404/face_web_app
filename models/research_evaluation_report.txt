@@ -1,0 +1,125 @@
+======================================================================
+      FACE RECOGNITION RESEARCH-GRADE EVALUATION REPORT
+      DateTime: 2026-01-28 21:13:17
+======================================================================
+
+--- 1. MODEL CONFIGURATION & PARAMETERS ---
+Classifier:      Support Vector Machine (SVM)
+Kernel:          linear
+C (Regul.):      1.0
+Feature Dim:     128 (FaceNet dlib ResNet)
+Identities:      95
+Conf. Threshold: 0.15
+
+--- 2. PERFORMANCE METRICS (Memorization Test) ---
+Raw Accuracy:    0.4363 (Top-1 recall without threshold)
+Thres. Accuracy: 0.0230 (With 0.15 cutoff)
+Macro Avg F1:    0.4137
+Weighted Avg F1: 0.3679
+Avg Confidence:  0.0385
+
+--- 3. DETAILED CLASSIFICATION REPORT (Raw) ---
+                     precision    recall  f1-score   support
+
+         EMP_ARIANA       1.00      1.00      1.00         4
+         EMP_BAOLAM       0.67      1.00      0.80         4
+         EMP_BILLIE       1.00      1.00      1.00         3
+           EMP_BINZ       0.00      0.00      0.00         5
+        EMP_BOYOUNG       0.00      0.00      0.00         7
+ EMP_BRUNOFERNANDES       1.00      1.00      1.00         4
+     EMP_BUITHIXUAN       1.00      0.17      0.29         6
+      EMP_CHAEUNWOO       0.00      0.00      0.00         7
+        EMP_CHARLIE       1.00      1.00      1.00         1
+ EMP_CHINENHIDEKAZU       0.00      0.00      0.00         6
+         EMP_CONGLY       0.00      0.00      0.00         3
+     EMP_DAVIDDEGEA       1.00      1.00      1.00         5
+         EMP_DOHYUN       0.00      0.00      0.00         7
+          EMP_DOLAN       1.00      0.33      0.50         6
+         EMP_DOMIXI       0.80      1.00      0.89         4
+    EMP_DONALDTRUMP       1.00      0.83      0.91         6
+        EMP_DUCPHUC       0.18      1.00      0.31         2
+     EMP_DUONGDOMIC       0.05      1.00      0.09         4
+      EMP_EIJIAKASO       0.00      0.00      0.00         6
+       EMP_ELONMUSK       1.00      1.00      1.00         5
+           EMP_EMMA       1.00      1.00      1.00         4
+  EMP_ERLINGHAALAND       0.80      0.80      0.80         5
+          EMP_HAEIN       0.00      0.00      0.00         7
+ EMP_HASHIMOTAKANNA       0.00      0.00      0.00         6
+        EMP_HATRANG       0.40      1.00      0.57         4
+      EMP_HEOMINHON       0.40      1.00      0.57         4
+     EMP_HIEUTHUHAI       0.25      1.00      0.40         4
+       EMP_HOAMINZY       0.00      0.00      0.00         3
+      EMP_HOCHIMINH       1.00      1.00      1.00         2
+        EMP_HYOSEOP       0.00      0.00      0.00         7
+        EMP_HYUNJIN       0.00      0.00      0.00         7
+ EMP_INUKAIATSUHIRO       0.00      0.00      0.00         6
+          EMP_ISAAC       0.00      0.00      0.00         5
+             EMP_IU       0.00      0.00      0.00         7
+    EMP_JICHANGWOOK       0.00      0.00      0.00         7
+            EMP_JIN       0.00      0.00      0.00         7
+          EMP_JISOO       0.08      1.00      0.14         2
+      EMP_JOE_BIDEN       1.00      1.00      1.00         3
+       EMP_JUNGKOOK       0.00      0.00      0.00         7
+   EMP_JUSTINBIEBER       0.40      1.00      0.57         2
+     EMP_KAHOTAKADA       0.00      0.00      0.00         6
+          EMP_KAITY       0.27      1.00      0.42         4
+   EMP_KARIMBENZEMA       1.00      1.00      1.00         3
+      EMP_KENTOKAKU       0.86      1.00      0.92         6
+  EMP_KEVINDEBRUYNE       1.00      1.00      1.00         6
+      EMP_KIENHOANG       0.80      1.00      0.89         4
+        EMP_KIEUANH       0.00      0.00      0.00         5
+       EMP_KIMJIWON       0.11      1.00      0.19         4
+       EMP_LEONARDO       1.00      1.00      1.00         5
+    EMP_LETHITUKIEN       1.00      1.00      1.00         3
+       EMP_LONGCHUN       0.80      1.00      0.89         4
+  EMP_MASAHIROINOUE       0.00      0.00      0.00         6
+         EMP_MBAPPE       1.00      1.00      1.00         6
+          EMP_MESSI       0.70      1.00      0.82         7
+       EMP_MINHHANG       0.00      0.00      0.00         5
+         EMP_NAYEON       0.00      0.00      0.00         7
+         EMP_NEYMAR       0.75      1.00      0.86         3
+       EMP_NGO_PHAT       0.00      0.00      0.00         7
+    EMP_NGUYENTHILY       1.00      0.50      0.67         6
+EMP_NGUYEN_XUAN_TAI       0.00      0.00      0.00         5
+       EMP_NINHTITO       1.00      0.60      0.75         5
+    EMP_OHATASHIERI       0.00      0.00      0.00         6
+     EMP_OSHIDAGAKU       0.00      0.00      0.00         6
+            EMP_PAM       1.00      0.20      0.33         5
+      EMP_PARKBOGUM       0.00      0.00      0.00         6
+           EMP_PHAO       0.27      1.00      0.42         4
+      EMP_QUANGLINH       0.33      1.00      0.50         2
+        EMP_RONALDO       1.00      1.00      1.00        15
+      EMP_RUBENDIAS       1.00      1.00      1.00         5
+           EMP_RUKA       0.17      1.00      0.29         4
+          EMP_SALIM       0.00      0.00      0.00         6
+        EMP_SEOYEJI       0.00      0.00      0.00         7
+          EMP_SHAWN       1.00      1.00      1.00         3
+     EMP_SHINEUNSOO       0.00      0.00      0.00         7
+EMP_SHUNYASHIRAISHI       0.00      0.00      0.00         7
+          EMP_SOMIN       0.00      0.00      0.00         7
+    EMP_SONHEUNGMIN       0.00      0.00      0.00         3
+        EMP_SONTUNG       0.00      0.00      0.00         5
+         EMP_SOOBIN       0.00      0.00      0.00         5
+           EMP_SUZY       0.00      0.00      0.00         7
+      EMP_TACHIHIEU       0.00      0.00      0.00         5
+         EMP_TAYLOR       1.00      1.00      1.00         3
+       EMP_THANHHAI       0.44      1.00      0.62         4
+       EMP_THUYTIEN       0.00      0.00      0.00         3
+       EMP_TIENLUAT       0.33      1.00      0.50         4
+            EMP_TOM       1.00      0.20      0.33         5
+      EMP_TRANTHANH       0.40      1.00      0.57         4
+    EMP_TRIEULEDINH       0.44      1.00      0.62         4
+    EMP_TRUONGGIANG       0.80      1.00      0.89         4
+  EMP_TRUONGXUANNAM       1.00      0.20      0.33         5
+        EMP_TUNPHAM       0.19      1.00      0.32         4
+        EMP_VANDUNG       1.00      0.20      0.33         5
+ EMP_VINICIUSJUNIOR       1.00      1.00      1.00         6
+        EMP_XUANBAC       1.00      1.00      1.00         5
+          EMP_YOONA       0.00      0.00      0.00         7
+
+           accuracy                           0.44       479
+          macro avg       0.43      0.52      0.41       479
+       weighted avg       0.39      0.44      0.37       479
+
+======================================================================
+End of Research Report

@@ -1,51 +1,48 @@
-# Hướng Dẫn Sử Dụng Face Recognition Web App
+# Face Recognition Attendance System
 
-Ứng dụng web nhận diện khuôn mặt tích hợp nhận diện danh tính và phân tích cảm xúc sử dụng Flask, OpenCV, và DeepFace.
-
-## 📋 Yêu cầu hệ thống
-
-Trước khi chạy ứng dụng, hãy đảm bảo bạn đã cài đặt Python và các thư viện sau:
+## Khởi động server
 
 ```bash
-pip install flask face_recognition opencv-python scikit-learn deepface
+python -m backend.main
 ```
 
-## 🛠️ Cài đặt và Khởi tạo
+Sau đó mở trình duyệt: http://localhost:8000
 
-1. **Chuẩn bị dữ liệu (Dataset):**
-   - Tạo thư mục `dataset/` trong thư mục gốc của dự án.
-   - Với mỗi người cần nhận diện, tạo một thư mục con mang tên người đó (ví dụ: `dataset/Nguyen_Van_A/`).
-   - Copy các ảnh khuôn mặt của người đó vào thư mục tương ứng (càng nhiều ảnh ở nhiều góc độ khác nhau thì độ chính xác càng cao).
+---
 
-2. **Huấn luyện mô hình (Training):**
-   - Bạn có thể huấn luyện mô hình bằng cách chạy file `train/knn_train.py` hoặc nhấn nút **Train Model** trên giao diện web.
-   - Kết quả huấn luyện sẽ được lưu vào file `knn_model.pkl`.
+## Cấu trúc file quan trọng
 
-## 🚀 Chạy ứng dụng
-
-Khởi động server Flask bằng lệnh:
-
-```bash
-python app.py
+```
+face-web-app/
+├── employees_metadata.json          # Data 95 nhân viên + embeddings
+├── models/
+│   ├── classifier.pkl               # SVM model đã train
+│   ├── confusion_matrix.png         # Confusion matrix
+│   ├── confidence_distribution.png  # Confidence chart
+│   └── samples_distribution.png     # Samples chart
+├── dataset/                         # 95 thư mục ảnh training
+├── backend/
+│   ├── main.py                      # FastAPI server
+│   ├── services/                    # AI services
+│   └── api/                         # API endpoints
+└── templates/
+    └── index.html                   # Web UI (3 tabs)
 ```
 
-Truy cập địa chỉ `http://127.0.0.1:5000` trên trình duyệt để bắt đầu sử dụng.
+---
 
-## 🔍 Các tính năng chính
+## API Endpoints
 
-### 1. Nhận diện trực tiếp qua Camera
-- Truy cập menu **Camera**.
-- Hệ thống sẽ sử dụng webcam để nhận diện khuôn mặt và cảm xúc theo thời gian thực.
-- Tên người (nếu có trong dataset) và cảm xúc sẽ hiển thị trực tiếp trên khung hình.
+- `GET /` - Web UI
+- `POST /api/check-in` - Auto face recognition
+- `POST /api/register` - Đăng ký user mới + retrain
+- `GET /api/health` - Health check
 
-### 2. Nhận diện qua ảnh tải lên
-- Truy cập menu **Recognize from Image**.
-- Tải lên một file ảnh chứa khuôn mặt.
-- Hệ thống sẽ phân tích và trả về kết quả gồm: Tên, khoảng cách tương đồng (độ tin cậy) và cảm xúc của từng người trong ảnh.
+---
 
-### 3. Nhận diện cảm xúc
-- Hệ thống tự động phân tích cảm xúc (vui, buồn, tức giận, ngạc nhiên...) cho mỗi khuôn mặt được phát hiện bằng thư viện `DeepFace`.
+## Tech Stack
 
-## ⚠️ Lưu ý
-- Đảm bảo môi trường đủ ánh sáng khi sử dụng camera.
-- Khoảng cách tương đồng (distance) càng nhỏ (~ < 0.5) thì độ chính xác nhận diện danh tính càng cao.
+- **Backend:** FastAPI + Python 3.11
+- **AI:** face_recognition (dlib ResNet) + SVM
+- **Frontend:** HTML/CSS/JS + MediaPipe CDN
+- **Data:** JSON metadata (không dùng database)

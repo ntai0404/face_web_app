@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*$py.class
+dataset/
+*.db
+.env
+.venv
+venv/
+.idea/
+.vscode/
+ggsheet-key.json

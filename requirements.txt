@@ -1,0 +1,44 @@
+# ============================================
+# WEB FRAMEWORK
+# ============================================
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+jinja2==3.1.3
+
+# ============================================
+# AI/ML CORE - Updated versions
+# ============================================
+tensorflow==2.15.0
+# facenet-pytorch==2.5.3  # Will add after testing TensorFlow
+scikit-learn==1.3.2
+opencv-python-headless==4.8.1.78
+# mtcnn==0.1.1  # Will add with facenet
+
+# ============================================
+# DATABASE (REMOVED - Using JSON instead)
+# ============================================
+# sqlalchemy==2.0.25
+# alembic==1.13.1
+
+# ============================================
+# GOOGLE SHEETS INTEGRATION
+# ============================================
+gspread==5.12.4
+google-auth==2.27.0
+google-auth-oauthlib==1.2.0
+
+# ============================================
+# UTILITIES
+# ============================================
+numpy==1.24.3
+pillow==10.1.0
+python-dotenv==1.0.0
+joblib==1.3.2
+
+# ============================================
+# EXISTING DEPENDENCIES (keep for compatibility)
+# ============================================
+flask==3.0.0
+face-recognition==1.3.0
+deepface==0.0.79
