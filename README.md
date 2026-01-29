@@ -7,11 +7,11 @@ Hệ thống điểm danh khuôn mặt Chuyên nghiệp (Production-Grade) sử 
 Hệ thống không sử dụng một thư viện đơn lẻ mà kết hợp một chuỗi (pipeline) 5 giai đoạn xử lý chuyên sâu:
 
 ### 1. Face Detection & Anti-Spoofing (Liveness)
-*   **Công nghệ**: `MobileNetV2` (Deep Learning) + Phân tích tần số (FFT).
+*   **Công nghệ**: `MediaPipe Face Detection` (Frontend) + Phân tích tần số `FFT` (Backend).
 *   **Chức năng**:
-    *   Phát hiện khuôn mặt trong khung hình.
-    *   **Lớp bảo vệ**: Phân tích kết cấu da và quang phổ để phân biệt **Mặt thật** vs **Mặt giả** (ảnh in, màn hình điện thoại).
-    *   Nếu phát hiện giả mạo, hệ thống từ chối xử lý ngay lập tức.
+    *   **MediaPipe**: Phát hiện và theo dõi khuôn mặt thời gian thực ngay trên trình duyệt (tốc độ cao).
+    *   **Lớp bảo vệ (FFT)**: Phân tích kết cấu da và quang phổ tại Server để phân biệt **Mặt thật** vs **Mặt giả** (ảnh in, màn hình điện thoại).
+    *   Nếu phát hiện giả mạo hoặc không có mặt, hệ thống từ chối xử lý ngay lập tức.
 
 ### 2. Face Alignment (Căn chỉnh)
 *   **Công nghệ**: `MTCNN` (Multi-task Cascaded Convolutional Networks).
@@ -21,10 +21,10 @@ Hệ thống không sử dụng một thư viện đơn lẻ mà kết hợp m�
     *   **Tại sao cần?**: FaceNet hoạt động kém nếu mặt bị nghiêng. Bước này giúp chuẩn hóa dữ liệu đầu vào.
 
 ### 3. Feature Extraction (Trích xuất đặc trưng)
-*   **Công nghệ**: `FaceNet` (Inception ResNet v1).
+*   **Công nghệ**: `dlib ResNet` (thông qua thư viện `face_recognition`).
 *   **Chức năng**:
     *   Biến đổi hình ảnh khuôn mặt (đã căn chỉnh) thành một vector toán học 128 chiều (`Embedding Vector`).
-    *   **Đặc điểm**: Các vector của cùng một người sẽ nằm gần nhau trong không gian Euclide, của người khác nhau sẽ nằm xa nhau.
+    *   **Đặc điểm**: Đây là mô hình Deep Learning được huấn luyện trên hàng triệu khuôn mặt, giúp trích xuất các đặc điểm định danh duy nhất.
 
 ### 4. Classification (Định danh)
 *   **Công nghệ**: `SVM` (Support Vector Machine) với Linear Kernel.
