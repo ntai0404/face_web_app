@@ -1,0 +1,50 @@
+Bộ tiêu chí đánh giá công nghệ AI cho nhận diện khuôn mặt
+
+1. ĐỘ Chính xác trong môi trường thực
+- Cần đánh giá: 
+	+ Hoạt động tốt với Ánh sáng kém/ Góc mặt lệch / Biểu cảm khác nhau hay ko ?
+	+ Ổn định khi Camera chất lượng trung bình / Khoảng cách thay đổi hay ko ?
+-> Ưu tiên model đã được kiểm chứng thực tế (production-proven) vì doanh nghiệp không kiểm soát được điều kiện môi trường
+
+2. HIỆU NĂNG & ĐỘ TRỄ
+- Cần đánh giá: 
+	+ Thời gian xử lý / frame
+	+ FPS trên CPU / GPU phổ thông
+	+ Độ ổn định khi chạy lâu
+->  Ưu tiên Model nhẹ, inference nhanh, Có thể chạy CPU (nếu cần)
+
+3. KHẢ NĂNG MỞ RỘNG
+- Cần đánh giá:
+	+ Khi số người tăng từ 100 → 10.000+ / Khi số camera tăng / Khi cần tích hợp hệ thống khác thì hệ thống có sẵn sàng ko?
+-> Ưu tiên Dùng embedding vector và Hỗ trợ vector search
+
+4. KHẢ NĂNG TRIỂN KHAI
+- Cần đánh giá:
+	+ Không phụ thuộc môi trường phức tạp
+	+ Có pretrained model
+-> Cần có pipeline rõ ràng 
+
+5. TÍNH BẢO MẬT & RIÊNG TƯ
+- Cần đánh giá: 
+	+ Có cần lưu ảnh gốc không
+	+ Có thể lưu embedding thay thế?
+-> Ưu tiên không lưu ảnh gốc, Embedding khó đảo ngược, Dễ mã hóa
+
+6. MỨC ĐỘ HIỆN ĐẠI CỦA CÔNG NGHỆ
+- Cần đánh giá
+	+ Model có còn active không ?
+	+ Có cộng đồng / cập nhật ko ?
+	+ Có được sử dụng trong sản phẩm thực ko?
+-> Tránh công nghệ lỗi thời (Haar, LBPH)
+
+7. CHI PHÍ VẬN HÀNH
+- Cần đánh giá: 
+	+ Có cần GPU không? Chạy CPU có ổn không?
+-> Cần phải tối ưu cost hơn là chạy model nặng
+
+8. RỦI RO TRIỂN KHAI
+- Cần đánh giá: 
+	+ Độ phức tạp triển khai ?
+	+ Khả năng fail trong thời gian ngắn ntn ?
+	+ Phụ thuộc bên thứ ba ko ?
+-> Cần phải Chọn giải pháp ít rủi ro hơn, không phải “ngầu” nhất

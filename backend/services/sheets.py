@@ -44,27 +44,48 @@ class GoogleSheetsService:
         except Exception as e:
             print(f"⚠️ Error checking headers: {e}")
 
+    def _parse_date(self, date_val):
+        """Helper to parse date string into YYYY-MM-DD format regardless of sheet locale"""
+        if not date_val: return ""
+        s = str(date_val).strip()
+        for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y", "%Y/%m/%d"):
+            try:
+                return datetime.strptime(s, fmt).strftime("%Y-%m-%d")
+            except ValueError:
+                continue
+        return s # Fallback to original string
+
     def get_today_status(self, employee_code):
         """Check if employee has checked in today and return status"""
+        if not self.sheet:
+            self.connect()
         if not self.sheet:
             return None
         
         try:
-            today = datetime.now().strftime("%Y-%m-%d")
+            today_obj = datetime.now()
+            today_str = today_obj.strftime("%Y-%m-%d")
+            
             all_records = self.sheet.get_all_records()
+            search_code = str(employee_code).strip().lower()
+            
+            print(f"🔍 Searching today's status for: {search_code} (Date: {today_str})")
             
             for idx, record in enumerate(reversed(all_records), start=1):
-                rec_date = str(record.get('Date', '')).strip()
-                rec_code = str(record.get('Employee Code', '')).strip()
+                raw_date = record.get('Date', '')
+                rec_date = self._parse_date(raw_date)
+                rec_code = str(record.get('Employee Code', '')).strip().lower()
                 
-                if rec_code == str(employee_code).strip() and rec_date == today:
+                if rec_code == search_code and rec_date == today_str:
                     row_num = len(all_records) - idx + 2  # +2 for header and 1-indexing
+                    print(f"📍 Found record at row {row_num} (Raw Date was: {raw_date})")
                     return {
                         'row': row_num,
                         'check_in_time': record.get('Check-In Time'),
                         'check_out_time': record.get('Check-Out Time'),
                         'status': record.get('Status')
                     }
+            print(f"❓ No record found today for {search_code}")
             return None
         except Exception as e:
             print(f"❌ Error checking today status: {e}")
@@ -94,7 +115,7 @@ class GoogleSheetsService:
             live_str = f"{liveness:.4f}" if liveness else "0.0000"
             
             row = [today, employee_code, name, check_in_time, '', '', conf_str, live_str, 'Checked-In']
-            self.sheet.append_row(row)
+            self.sheet.append_row(row, value_input_option='USER_ENTERED')
             print(f"✅ Check-In logged: {name} ({check_in_time})")
             return True
         except Exception as e:
@@ -139,7 +160,7 @@ class GoogleSheetsService:
             
             update_values = [[check_out_time, f"{duration:.2f}", confidence, liveness, 'Completed']]
             cell_range = f"E{status['row']}:I{status['row']}"
-            self.sheet.update(cell_range, update_values)
+            self.sheet.update(cell_range, update_values, value_input_option='USER_ENTERED')
             
             print(f"✅ Check-Out logged: {name} ({check_out_time}, {duration:.2f}hrs)")
             return True

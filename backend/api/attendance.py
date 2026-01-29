@@ -30,7 +30,7 @@ async def get_today_stats(sheets: GoogleSheetsService = Depends(get_sheets_servi
         # Robust filtering
         today_records = []
         for r in all_records:
-            r_date = str(r.get('Date', '')).strip()
+            r_date = sheets._parse_date(r.get('Date', ''))
             if r_date == today:
                 today_records.append(r)
         
@@ -66,7 +66,7 @@ async def get_today_attendance(sheets: GoogleSheetsService = Depends(get_sheets_
         # Robust date filtering: handle potential string mismatch or local formatting
         today_records = []
         for r in all_records:
-            r_date = str(r.get('Date', '')).strip()
+            r_date = sheets._parse_date(r.get('Date', ''))
             if r_date == today:
                 today_records.append(r)
         

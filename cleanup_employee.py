@@ -12,6 +12,7 @@ from backend.config import DATASET_DIR, EMPLOYEES_METADATA_PATH, MODELS_DIR
 from backend.utils.metadata import EmployeesMetadata
 from backend.services.classifier import SVMClassifier
 from backend.services.knn_classifier import KNNClassifier
+from backend.services.sheets import GoogleSheetsService
 
 def remove_accents(text):
     """Remove Vietnamese accents for safe folder names"""
@@ -61,6 +62,35 @@ def cleanup(employee_code: str):
         knn = KNNClassifier(knn_path)
         knn.train(embeddings, labels)
         print(f"✅ KNN Retrained.")
+        
+    # 5. Cleanup Google Sheets (Today's records)
+    print(f"📄 Cleaning up Google Sheets records for {employee_code} (Today only)...")
+    try:
+        sheets = GoogleSheetsService()
+        sheets.connect()
+        if sheets.sheet:
+            all_records = sheets.sheet.get_all_records()
+            from datetime import datetime
+            today = datetime.now().strftime("%Y-%m-%d")
+            
+            # Find matching rows (Search from bottom to handle row shift better)
+            rows_to_delete = []
+            for idx, record in enumerate(all_records):
+                rec_date = sheets._parse_date(record.get('Date', ''))
+                rec_code = str(record.get('Employee Code', '')).strip().lower()
+                if rec_code == employee_code.lower() and rec_date == today:
+                    rows_to_delete.append(idx + 2) # +2 for header and 1-indexing
+            
+            if rows_to_delete:
+                # Delete rows from bottom up to avoid index shifting
+                for row_idx in sorted(rows_to_delete, reverse=True):
+                    sheets.sheet.delete_rows(row_idx)
+                    print(f"🗑️ Deleted sheet row {row_idx}")
+                print(f"✅ Removed {len(rows_to_delete)} records from Google Sheets.")
+            else:
+                print("ℹ️ No records found today in Google Sheets.")
+    except Exception as e:
+        print(f"⚠️ Error cleaning up Google Sheets: {e}")
     else:
         print("⚠️ No employees left in system. Skipping retraining.")
         # Optionally remove old model files if system is empty
