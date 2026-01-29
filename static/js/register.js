@@ -165,3 +165,16 @@ submitRegisterBtn.addEventListener('click', async () => {
         submitRegisterBtn.textContent = '✅ Đăng ký & Train Model';
     }
 });
+
+// Global exposure for tab management
+window.stopRegisterCamera = function () {
+    if (registerStream) {
+        registerStream.getTracks().forEach(t => t.stop());
+        registerStream = null;
+    }
+    registerVideo.srcObject = null;
+    startRegisterBtn.style.display = 'inline-block';
+    startRegisterBtn.textContent = '🎥 Mở Camera';
+    startRegisterBtn.disabled = false;
+    capturePhotoBtn.disabled = true;
+};

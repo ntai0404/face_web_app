@@ -35,8 +35,28 @@ class FaceNetExtractor:
         Returns:
             128-dimensional embedding vector
         """
-        # Convert BGR to RGB (face_recognition uses RGB)
-        rgb_image = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
+        if face_image is None or face_image.size == 0:
+            return None
+
+        # --- ROBUST CONVERSION FILTER ---
+        # 1. Ensure 8-bit depth (Fixes "must be 8bit gray or RGB image")
+        if face_image.dtype != np.uint8:
+            face_image = cv2.convertScaleAbs(face_image)
+
+        # 2. Ensure exactly 3 channels (Handle RGBA/Grayscale) 
+        if len(face_image.shape) == 2:
+            # Grayscale to RGB
+            rgb_image = cv2.cvtColor(face_image, cv2.COLOR_GRAY2RGB)
+        elif face_image.shape[2] == 4:
+            # RGBA to RGB
+            rgb_image = cv2.cvtColor(face_image, cv2.COLOR_BGRA2RGB)
+        else:
+            # Standard BGR to RGB
+            rgb_image = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
+        
+        # Ensure image is contiguous for dlib
+        rgb_image = np.ascontiguousarray(rgb_image)
+        # ---------------------------------
         
         # Get face encodings (128-d embeddings)
         # Since the image is already aligned and cropped, we tell dlib the whole image is a face

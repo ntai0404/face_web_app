@@ -63,5 +63,20 @@ Hệ thống không sử dụng một thư viện đơn lẻ mà kết hợp m�
     *   URL: `http://localhost:8000`
 
 ---
+
+## 👨‍💼 Quản trị & Bảo trì
+
+### 1. Xóa nhân viên và huấn luyện lại AI
+Để xóa hoàn toàn dấu vết của một nhân viên (ảnh, thông tin, dữ liệu AI), hãy chạy lệnh:
+```bash
+python cleanup_employee.py --code "MÃ_NHÂN_VIÊN"
+```
+*Lưu ý: Hệ thống sẽ tự động xóa thư mục ảnh và huấn luyện lại các model SVM/KNN để cập nhật danh sách mới.*
+
+### 2. Quản lý Google Sheets
+Mọi dữ liệu chấm công được đồng bộ trực tiếp tại link Google Sheet bạn đã cấu hình trong `ggsheet-key.json`.
+
+
+---
 **Tác giả**: [Your Name/Team Name]
 **Phiên bản**: 2.0.0

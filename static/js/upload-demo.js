@@ -66,12 +66,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (result.status === 'success') {
                 uploadResult.className = 'result-box success';
+
+                // Prepare dual-brain display (same as check-in tab)
+                let brainInfo = '';
+                if (result.svm_prediction && result.knn_prediction) {
+                    brainInfo = `
+                        <div style="margin-top: 15px; padding: 15px; background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(33,150,243,0.1)); border-radius: 8px; border: 2px solid rgba(255,255,255,0.2);">
+                            <p style="margin: 0 0 10px 0; font-weight: bold; font-size: 1.1em;">🧠 Dual-Brain Analysis</p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="padding: 10px; background: rgba(33,150,243,0.15); border-radius: 5px; text-align: center;">
+                                    <p style="margin: 0; font-size: 0.85em; color: #90CAF9;">SVM (Statistical)</p>
+                                    <p style="margin: 5px 0; font-size: 1.3em; font-weight: bold;">
+                                        ${(result.svm_prediction.confidence * 100).toFixed(1)}%
+                                    </p>
+                                    <p style="margin: 0; font-size: 0.8em;">
+                                        ${result.svm_prediction.code === result.employee_code ? '✓ Match' : '✗ Mismatch'}
+                                    </p>
+                                </div>
+                                <div style="padding: 10px; background: rgba(76,175,80,0.15); border-radius: 5px; text-align: center; border: 2px solid #4CAF50;">
+                                    <p style="margin: 0; font-size: 0.85em; color: #A5D6A7;">KNN (Distance)</p>
+                                    <p style="margin: 5px 0; font-size: 1.3em; font-weight: bold; color: #4CAF50;">
+                                        ${(result.knn_prediction.confidence * 100).toFixed(1)}%
+                                    </p>
+                                    <p style="margin: 0; font-size: 0.8em;">
+                                        ${result.knn_prediction.code === result.employee_code ? '✓ Match' : '✗ Mismatch'} • PRIMARY
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+
+                // Determine action icon and title
+                const actionIcon = result.action_type === 'check-out' ? '👋' : '✅';
+                const actionTitle = result.action_type === 'check-out' ? 'Check-out thành công!' : 'Nhận diện thành công!';
+
                 uploadInfo.innerHTML = `
-                    <h3>✅ Nhận diện thành công!</h3>
+                    <h3>${actionIcon} ${actionTitle}</h3>
                     <p><strong>Nhân viên:</strong> ${result.employee_name}</p>
                     <p><strong>Mã NV:</strong> ${result.employee_code}</p>
+                    <p><strong>Hành động:</strong> <span style="color: ${result.action_type === 'check-out' ? '#FF9800' : '#4CAF50'}; font-weight: bold;">${result.action_type === 'check-out' ? 'CHECK-OUT' : 'CHECK-IN'}</span></p>
                     <p><strong>Độ tin cậy:</strong> ${(result.confidence * 100).toFixed(1)}%</p>
+                    <p><strong>Liveness:</strong> ${(result.liveness_score * 100).toFixed(1)}%</p>
                     <p><strong>Thời gian:</strong> ${new Date(result.timestamp).toLocaleString('vi-VN')}</p>
+                    ${brainInfo}
+                    <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🔄 Test lại
+                    </button>
+                `;
+            } else if (result.status === 'retry') {
+                uploadResult.className = 'result-box error';
+                uploadInfo.innerHTML = `
+                    <h3>🔄 Độ tin cậy chưa đủ</h3>
+                    <p>${result.message}</p>
+                    <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #FF9800; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🔄 Thử lại
+                    </button>
                 `;
             } else {
                 uploadResult.className = 'result-box error';

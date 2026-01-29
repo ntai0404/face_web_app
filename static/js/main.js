@@ -18,6 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add active class to clicked button and corresponding pane
             button.classList.add('active');
             document.getElementById(`${targetTab}-tab`).classList.add('active');
+
+            // --- TAB MANAGEMENT: Stop background cameras ---
+            if (targetTab !== 'check-in' && typeof window.stopCheckinCamera === 'function') {
+                window.stopCheckinCamera();
+            }
+            if (targetTab !== 'register' && typeof window.stopRegisterCamera === 'function') {
+                window.stopRegisterCamera();
+            }
         });
     });
 });

@@ -10,8 +10,8 @@ from contextlib import asynccontextmanager
 from backend.config import ALLOWED_ORIGINS, API_HOST, API_PORT, EMPLOYEES_METADATA_PATH
 from backend.utils.metadata import EmployeesMetadata
 
-# Import API routers (sẽ tạo sau)
-# from backend.api import check_in, register, logs
+# Import API routers
+from backend.api import check_in, register, logs, attendance
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -83,8 +83,7 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# Import API routers
-from backend.api import check_in, register, logs
+# ===================== ROUTES =====================
 
 # ===================== ROUTES =====================
 
@@ -113,6 +112,7 @@ async def health_check():
 app.include_router(check_in.router, prefix="/api", tags=["check-in"])
 app.include_router(register.router, prefix="/api", tags=["register"])
 app.include_router(logs.router, prefix="/api", tags=["logs"])
+app.include_router(attendance.router, prefix="/api", tags=["attendance"])
 
 if __name__ == "__main__":
     import uvicorn

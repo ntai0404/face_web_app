@@ -51,9 +51,25 @@
                         </div>
                     </div>
 
+                    <!-- Action Selector -->
+                    <div class="action-selector"
+                        style="margin-bottom: 20px; text-align: center; padding: 15px; background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(255,152,0,0.1)); border-radius: 10px;">
+                        <label style="font-weight: bold; margin-right: 15px; font-size: 1.1em;">Chọn hành động:</label>
+                        <button type="button" id="action-checkin-btn" class="action-btn"
+                            style="padding: 12px 25px; margin: 5px; border: 2px solid #4CAF50; background: #4CAF50; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em;"
+                            onclick="selectAction('check-in')">
+                            ✅ Check-In
+                        </button>
+                        <button type="button" id="action-checkout-btn" class="action-btn"
+                            style="padding: 12px 25px; margin: 5px; border: 2px solid #FF9800; background: transparent; color: #FF9800; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em;"
+                            onclick="selectAction('check-out')">
+                            👋 Check-Out
+                        </button>
+                    </div>
+
                     <div class="camera-controls">
                         <button id="start-checkin-camera" class="btn btn-primary btn-large">
-                            🎥 Bắt đầu Check-in
+                            🎥 Bắt đầu quét
                         </button>
                         <button id="stop-checkin-camera" class="btn btn-secondary" style="display: none;">
                             ⏸️ Dừng
@@ -122,9 +138,37 @@
             <div id="logs-tab" class="tab-pane">
                 <h2>📊 Lịch sử Check-in</h2>
 
-                <div class="logs-section">
+                <div class="logs-container">
+                    <!-- Dashboard Statistics -->
+                    <div class="dashboard-stats"
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                        <div class="stat-card"
+                            style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 20px; border-radius: 12px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <p style="margin:0; opacity:0.8; font-size:0.9em;">Tổng nhân viên hôm nay</p>
+                            <h2 id="stat-total" style="margin:10px 0 0 0; font-size:2.2em;">0</h2>
+                        </div>
+                        <div class="stat-card"
+                            style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 20px; border-radius: 12px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <p style="margin:0; opacity:0.8; font-size:0.9em;">Đã Check-In</p>
+                            <h2 id="stat-checkin" style="margin:10px 0 0 0; font-size:2.2em;">0</h2>
+                        </div>
+                        <div class="stat-card"
+                            style="background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); padding: 20px; border-radius: 12px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <p style="margin:0; opacity:0.8; font-size:0.9em;">Đã Check-Out</p>
+                            <h2 id="stat-checkout" style="margin:10px 0 0 0; font-size:2.2em;">0</h2>
+                        </div>
+                        <div class="stat-card"
+                            style="background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); padding: 20px; border-radius: 12px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <p style="margin:0; opacity:0.8; font-size:0.9em;">Đang làm việc</p>
+                            <h2 id="stat-working" style="margin:10px 0 0 0; font-size:2.2em;">0</h2>
+                        </div>
+                    </div>
+
                     <div class="logs-header">
-                        <button id="refresh-logs" class="btn btn-primary">
+                        <div class="search-box">
+                            <input type="text" id="log-search" placeholder="Tìm theo tên hoặc mã NV...">
+                        </div>
+                        <button id="refresh-logs" class="btn btn-secondary">
                             🔄 Tải lại dữ liệu
                         </button>
                         <button id="export-excel" class="btn btn-success">
