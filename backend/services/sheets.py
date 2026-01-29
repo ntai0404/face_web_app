@@ -120,15 +120,26 @@ class GoogleSheetsService:
                 print(f"⚠️ {name} already checked out at {status['check_out_time']}")
                 return False
             
-            # Update existing row
+            # Update existing row (Efficiently update range 5-9)
             check_out_time = datetime.now().strftime("%H:%M:%S")
             check_in_dt = datetime.strptime(status['check_in_time'], "%H:%M:%S")
             check_out_dt = datetime.strptime(check_out_time, "%H:%M:%S")
             duration = (check_out_dt - check_in_dt).total_seconds() / 3600  # hours
             
-            self.sheet.update_cell(status['row'], 5, check_out_time)  # Check-Out Time
-            self.sheet.update_cell(status['row'], 6, f"{duration:.2f}")  # Duration
-            self.sheet.update_cell(status['row'], 7, 'Completed')  # Status
+            # We want to update columns 5, 6, 7, 8, 9
+            # 5: Check-Out Time
+            # 6: Duration
+            # 7: Confidence (Keep existing)
+            # 8: Liveness (Keep existing)
+            # 9: Status
+            # First, fetch current values for 7 and 8 to avoid overwriting them with empty strings
+            row_data = self.sheet.row_values(status['row'])
+            confidence = row_data[6] if len(row_data) >= 7 else ''
+            liveness = row_data[7] if len(row_data) >= 8 else ''
+            
+            update_values = [[check_out_time, f"{duration:.2f}", confidence, liveness, 'Completed']]
+            cell_range = f"E{status['row']}:I{status['row']}"
+            self.sheet.update(cell_range, update_values)
             
             print(f"✅ Check-Out logged: {name} ({check_out_time}, {duration:.2f}hrs)")
             return True
