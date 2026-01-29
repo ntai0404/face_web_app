@@ -1,0 +1,20 @@
+📂 Loading data from employees_metadata.json...
+✅ Loaded 485 vectors from 96 identities.
+
+🎨 STEP 1: Generative t-SNE Visualization...
+   Plotting top 20 classes (148 samples) to 'ai_health_check_tsne.png'...
+✅ Saved t-SNE plot to ai_health_check_tsne.png
+
+⚔️ STEP 2: Benchmarking SVM vs KNN...
+   ℹ️ Filtered 1 samples (single-image classes). Remaining: 484
+   🔹 KNN Accuracy (k=1): 86.60%
+   🔹 SVM Accuracy (Linear): 48.45%
+   ⚠️ CONCLUSION: KNN is much better. -> Likely SVM PARAMETER ISSUE.
+
+mjlj STEP 3: Distance Analysis (Intra vs Inter class)...
+   🔹 Avg Distance SAME person (Intra): 0.4232 (Lower is better)
+   🔹 Avg Distance DIFF people (Inter): 0.7099 (Higher is better)
+   🔹 Ratio (Intra/Inter): 0.5962
+   ℹ️ OK: Acceptable separation.
+
+✅ Health Check Complete. Please open 'ai_health_check_tsne.png' to view clusters.

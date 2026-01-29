@@ -25,6 +25,9 @@ class CheckInResponse(BaseModel):
     liveness_score: float | None = None
     message: str | None = None
     timestamp: str = None
+    # Dual-brain predictions
+    svm_prediction: dict | None = None  # {"code": "EMP_X", "confidence": 0.09}
+    knn_prediction: dict | None = None  # {"code": "EMP_X", "confidence": 0.85}
 
 @router.post("/check-in", response_model=CheckInResponse)
 async def check_in(
@@ -68,6 +71,7 @@ async def check_in(
         face_aligner = app_request.app.state.face_aligner
         facenet_extractor = app_request.app.state.facenet_extractor
         svm_classifier = app_request.app.state.svm_classifier
+        knn_classifier = app_request.app.state.knn_classifier
         
         # Step 2: Liveness Detection
         if LIVENESS_ENABLED:
@@ -97,8 +101,13 @@ async def check_in(
         # Step 4: Feature Extraction
         embedding = facenet_extractor.extract(aligned_face)
         
-        # Step 5: SVM Classification
-        employee_code, confidence = svm_classifier.predict(embedding)
+        # Step 5: Dual-Brain Classification (SVM + KNN)
+        svm_code, svm_conf = svm_classifier.predict(embedding)
+        knn_code, knn_conf = knn_classifier.predict(embedding)
+        
+        # Use KNN as primary (based on health check results)
+        employee_code = knn_code
+        confidence = knn_conf
         
         if employee_code == "Unknown":
             return CheckInResponse(
@@ -106,6 +115,8 @@ async def check_in(
                 message="Unknown person - Please register first",
                 confidence=confidence,
                 liveness_score=liveness_score,
+                svm_prediction={"code": svm_code, "confidence": svm_conf},
+                knn_prediction={"code": knn_code, "confidence": knn_conf},
                 timestamp=datetime.now().isoformat()
             )
         
@@ -141,6 +152,8 @@ async def check_in(
             confidence=confidence,
             liveness_score=liveness_score,
             message=f"Welcome, {employee_info['full_name']}!",
+            svm_prediction={"code": svm_code, "confidence": svm_conf},
+            knn_prediction={"code": knn_code, "confidence": knn_conf},
             timestamp=datetime.now().isoformat()
         )
         

@@ -31,12 +31,14 @@ async def lifespan(app: FastAPI):
     from backend.services.alignment import FaceAligner
     from backend.services.extraction import FaceNetExtractor
     from backend.services.classifier import SVMClassifier
+    from backend.services.knn_classifier import KNNClassifier
     from backend.config import (
         LIVENESS_MODEL_PATH,
         FACENET_MODEL_PATH,
         SVM_MODEL_PATH,
         LIVENESS_THRESHOLD,
-        SVM_CONFIDENCE_THRESHOLD
+        SVM_CONFIDENCE_THRESHOLD,
+        MODELS_DIR
     )
     
     print("📦 Loading AI services...")
@@ -51,6 +53,7 @@ async def lifespan(app: FastAPI):
     app.state.face_aligner = FaceAligner()
     app.state.facenet_extractor = FaceNetExtractor(FACENET_MODEL_PATH)
     app.state.svm_classifier = SVMClassifier(SVM_MODEL_PATH, SVM_CONFIDENCE_THRESHOLD)
+    app.state.knn_classifier = KNNClassifier(MODELS_DIR / "knn_classifier.pkl", n_neighbors=1)
     
     print("✅ All models loaded successfully")
     

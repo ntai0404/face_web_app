@@ -72,8 +72,17 @@ async def register_employee(
             )
         
         # Step 2: Create employee folder in dataset
-        employee_folder = Path(DATASET_DIR) / request.full_name.replace(' ', '_')
+        # Sanitize folder name (remove Vietnamese diacritics for Windows compatibility)
+        import unicodedata
+        def remove_accents(text):
+            """Remove Vietnamese accents for safe folder names"""
+            nfd = unicodedata.normalize('NFD', text)
+            return ''.join([c for c in nfd if unicodedata.category(c) != 'Mn'])
+        
+        safe_folder_name = remove_accents(request.full_name).replace(' ', '_')
+        employee_folder = Path(DATASET_DIR) / safe_folder_name
         employee_folder.mkdir(parents=True, exist_ok=True)
+        print(f"📁 Created folder: {employee_folder}")
         
         # Create employee in metadata
         metadata.create_employee(
@@ -124,8 +133,8 @@ async def register_employee(
                 # Save embedding to metadata
                 metadata.add_embedding(request.employee_code, embedding)
                 
-                # Save image to dataset folder (Ensure absolute path)
-                img_filename = f"{request.employee_code}_{processed_count + 1}.jpg"
+                # Save image to dataset folder (Ensure absolute path + no accents)
+                img_filename = f"{safe_folder_name}_{processed_count + 1}.jpg"
                 img_path = (employee_folder / img_filename).resolve()
                 
                 success = cv2.imwrite(str(img_path), image)
@@ -165,17 +174,25 @@ async def register_employee(
                 detail=f"Chỉ xử lý thành công {processed_count}/{len(request.images)} ảnh. Cần tối thiểu 3 ảnh hợp lệ. Lỗi: {', '.join(failed_images)}"
             )
         
-        # Step 4: Retrain SVM model
-        print(f"🔄 Retraining SVM with {len(request.images)} new images for {request.full_name}...")
+        # Step 4: Retrain both SVM and KNN models
+        print(f"🔄 Retraining models with {len(request.images)} new images for {request.full_name}...")
         embeddings, labels = metadata.get_all_embeddings_for_training()
         
         if len(embeddings) > 0:
+            # Train SVM
             svm_classifier.train(embeddings, labels)
-            print(f"✅ SVM Retrained successfully. New employee {request.employee_code} is active.")
+            print(f"✅ SVM Retrained successfully.")
+            
+            # Train KNN
+            knn_classifier = app_request.app.state.knn_classifier
+            knn_classifier.train(embeddings, labels)
+            print(f"✅ KNN Retrained successfully.")
+            
+            print(f"✅ Both models ready. New employee {request.employee_code} is active.")
             
             return RegisterResponse(
                 status="success",
-                message=f"Đã đăng ký nhân viên {request.full_name} thành công và huấn luyện lại model",
+                message=f"Đã đăng ký nhân viên {request.full_name} thành công và huấn luyện lại cả 2 model (SVM + KNN)",
                 employee_code=request.employee_code,
                 images_processed=processed_count
             )

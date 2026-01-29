@@ -7,6 +7,7 @@ from pathlib import Path
 # Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_DIR = BASE_DIR / "models"
+MODELS_DIR = MODEL_DIR  # Alias for consistency
 DATASET_DIR = BASE_DIR / "dataset"
 
 # Metadata file (replaces database)
